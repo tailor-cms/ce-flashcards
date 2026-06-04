@@ -18,7 +18,7 @@
         multiple
       >
         <VExpandTransition v-if="!!cardCount" group>
-          <Flashcard
+          <FlashcardItem
             v-for="(item, index) in cards"
             :key="item.id"
             :allow-deletion="cardCount > 1"
@@ -54,7 +54,7 @@ import manifest from '@tailor-cms/ce-flashcards-manifest';
 import { useDraggable } from 'vue-draggable-plus';
 import { v4 as uuid } from 'uuid';
 
-import Flashcard from './Flashcard.vue';
+import FlashcardItem from './FlashcardItem.vue';
 
 const props = defineProps<{
   element: Element;

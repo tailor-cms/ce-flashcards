@@ -15,12 +15,5 @@ export default [
         extraFileExtensions: ['.vue'],
       },
     },
-  },
-  {
-    rules: {
-      // `Flashcard` is the natural name for a single card; the multi-word rule
-      // only guards against HTML-tag collisions, which is a non-issue here.
-      'vue/multi-word-component-names': ['error', { ignores: ['Flashcard'] }],
-    },
-  },
+  }
 ];
