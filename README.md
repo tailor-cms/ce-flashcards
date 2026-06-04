@@ -1,30 +1,35 @@
 # Flashcards
 
-Flashcards content element — a deck of two-sided cards learners flip through to
-review prompts and answers.
+A deck of two-sided cards. Each card has a **front** and a **back**, and every
+face is a container that can hold other content elements (rich text, images,
+etc.). A composite element (`isComposite: true`) — the faces embed child
+elements rather than storing plain text.
 
 **Type:** `FLASHCARDS`
-
-> **Scaffold:** the package is wired for CEK v2, but the Edit and Display
-> components are still the template placeholders. Implement the card-deck UI and
-> fill in the **Data** table below as you build it out.
 
 ## Data
 
 | Field | Type | Description |
 |-------|------|-------------|
-| _add card-deck fields here_ | | |
+| `items` | `Record<string, FlashcardItem>` | The deck, keyed by card id. |
+| `embeds` | `Record<string, Embed>` | Flat map of every embedded element across all cards/faces. |
 
-Only list fields that are meaningful to the element's behavior. Omit framework
-internals like `assets` (the dual-URL storage map).
+Each `FlashcardItem` is `{ id, front, back, position }`, where `front` and
+`back` are embed containers — maps of the embed ids placed on that face.
 
 ## Edit
 
-- _author-facing card editor (to be implemented)_
+- Reorderable list of cards (drag handle), each labelled `Card N`
+- Per card, a **Front** and **Back** section, each an embedded-element
+  container for adding/removing child content elements
+- Add Card / delete card (delete confirmed via dialog; the last card can't be
+  deleted)
 
 ## Display
 
-- _learner-facing flip-card deck (to be implemented)_
+- One card at a time, click (or Enter/Space) to flip front ↔ back
+- Previous / Next navigation with a `current / total` position counter
+- Flipping resets when moving to another card
 
 ## Development
 

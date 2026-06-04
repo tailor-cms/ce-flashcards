@@ -25,7 +25,8 @@
     "prepublish": "pnpm build"
   },
   "dependencies": {
-    "@tailor-cms/cek-common": "^2.0.1"
+    "@tailor-cms/cek-common": "^2.0.1",
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@tailor-cms/eslint-config": "^2.0.1",

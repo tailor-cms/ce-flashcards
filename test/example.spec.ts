@@ -1,33 +1,29 @@
 import { expect, test } from '@playwright/test';
 import { pom } from '@tailor-cms/cek-e2e';
 
-const COPY = {
-  edit: 'Edit version of the content element',
-  display: 'Display version of the content element',
-  topToolbar: 'Edit element top toolbar',
-  sideToolbar: 'Edit element side toolbar',
-};
-
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
   await page.waitForLoadState('networkidle');
 });
 
-test('Renders Edit component', async ({ page }) => {
+test('Renders the deck editor with two starter cards', async ({ page }) => {
   const editPanel = new pom.EditPanel(page);
   await editPanel.persistFocus();
   await expect(editPanel.editor).toBeVisible();
-  await expect(editPanel.editor.getByText(COPY.edit)).toBeVisible();
-  await expect(editPanel.topToolbar).toBeVisible();
-  await expect(editPanel.topToolbar.getByText(COPY.topToolbar)).toBeVisible();
-  await expect(editPanel.sideToolbar).toBeVisible();
-  await expect(editPanel.sideToolbar.getByText(COPY.sideToolbar)).toBeVisible();
+  await expect(editPanel.editor.getByText('Flashcards')).toBeVisible();
+  await expect(editPanel.editor.getByText('Card 1')).toBeVisible();
+  await expect(editPanel.editor.getByText('Card 2')).toBeVisible();
+  await expect(
+    editPanel.editor.getByRole('button', { name: 'Add Card' }),
+  ).toBeVisible();
 });
 
-test('Renders Display component', async ({ page }) => {
+test('Renders the Display deck with a flippable card', async ({ page }) => {
   const displayPanel = new pom.DisplayPanel(page);
   await expect(displayPanel.editor).toBeVisible();
-  await expect(displayPanel.editor.getByText(COPY.display)).toBeVisible();
+  // Front face and the deck position counter are shown by default.
+  await expect(displayPanel.editor.getByText('Front')).toBeVisible();
+  await expect(displayPanel.editor.getByText('1 / 2')).toBeVisible();
 });
 
 test('Renders server state panel', async ({ page }) => {
@@ -38,8 +34,4 @@ test('Renders server state panel', async ({ page }) => {
   for (const prop of properties) {
     await expect(bottomPanel.authoringWindow.getByText(prop)).toBeVisible();
   }
-  await bottomPanel.userStateTab.click();
-  await expect(
-    bottomPanel.userStateWindow.locator('pre').getByText('state'),
-  ).toBeVisible();
 });
