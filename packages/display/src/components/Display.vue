@@ -150,6 +150,6 @@ const go = (delta: number) => {
   justify-content: safe center;
   overflow-y: auto;
   font-size: 1.5rem;
-  line-height: 1.3
+  line-height: 1.3;
 }
 </style>
