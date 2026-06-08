@@ -1,20 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { elementClient } from '@tailor-cms/cek-e2e';
 
+import { Deck } from '../factories';
 import { Display } from '../pom';
 
 const ELEMENT_ID = 'test-flashcards-display';
-
-const deck = (count: number) => ({
-  embeds: {},
-  items: Object.fromEntries(
-    Array.from({ length: count }, (_, i) => {
-      const id = String.fromCharCode(97 + i);
-      return [id, { id, front: {}, back: {}, position: i + 1 }];
-    }),
-  ),
-  height: 300,
-});
 
 test.beforeEach(async ({ page }) => {
   await elementClient.reset(ELEMENT_ID);
@@ -41,30 +31,10 @@ test.describe('Flip interaction', () => {
 
 test.describe('Face content routing', () => {
   test('Renders each face content on the correct side', async ({ page }) => {
-    // The runtime's EmbeddedContainer renders `embed.data.content` verbatim,
-    // so distinct text per face proves both rendering and front/back routing.
-    await elementClient.update(ELEMENT_ID, {
-      embeds: {
-        f1: {
-          id: 'f1',
-          data: { content: 'Front content' },
-          embedded: true,
-          position: 1,
-          type: 'TIPTAP_HTML',
-        },
-        b1: {
-          id: 'b1',
-          data: { content: 'Back content' },
-          embedded: true,
-          position: 1,
-          type: 'TIPTAP_HTML',
-        },
-      },
-      items: {
-        a: { id: 'a', front: { f1: true }, back: { b1: true }, position: 1 },
-      },
-      height: 300,
-    });
+    await elementClient.update(
+      ELEMENT_ID,
+      new Deck([{ front: 'Front content', back: 'Back content' }]),
+    );
     await page.reload({ waitUntil: 'networkidle' });
     const display = new Display(page);
     await expect(display.face('front')).toContainText('Front content');
@@ -76,7 +46,7 @@ test.describe('Face content routing', () => {
 
 test.describe('Navigation', () => {
   test('Hides navigation for a single-card deck', async ({ page }) => {
-    await elementClient.update(ELEMENT_ID, deck(1));
+    await elementClient.update(ELEMENT_ID, new Deck(1));
     await page.reload({ waitUntil: 'networkidle' });
     const display = new Display(page);
     await expect(display.card).toBeVisible();
@@ -86,7 +56,7 @@ test.describe('Navigation', () => {
   test('Shows and advances navigation for a multi-card deck', async ({
     page,
   }) => {
-    await elementClient.update(ELEMENT_ID, deck(3));
+    await elementClient.update(ELEMENT_ID, new Deck(3));
     await page.reload({ waitUntil: 'networkidle' });
     const display = new Display(page);
     await expect(display.counter(1, 3)).toBeVisible();
