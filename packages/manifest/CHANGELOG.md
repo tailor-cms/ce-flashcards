@@ -1,0 +1,7 @@
+# @tailor-cms/ce-flashcards-manifest
+
+## 0.0.2
+
+### Patch Changes
+
+- Implement flashcards.
