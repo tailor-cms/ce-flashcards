@@ -27,7 +27,7 @@
     </VExpansionPanels>
     <VBtn
       v-if="!isReadonly"
-      class="mt-6"
+      class="mt-4"
       prepend-icon="mdi-plus"
       text="Add Card"
       variant="text"
