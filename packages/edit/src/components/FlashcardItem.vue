@@ -1,11 +1,10 @@
 <!-- eslint-disable vue/no-undef-components -->
 <template>
-  <VExpansionPanel :value="item.id">
+  <VExpansionPanel :value="item.id" class="border sm">
     <VHover v-slot="{ isHovering, props: hoverProps }">
       <VExpansionPanelTitle
         v-bind="hoverProps"
         class="pa-2 pr-4"
-        color="primary-lighten-5"
         min-height="56"
       >
         <div class="d-flex align-center w-100">
@@ -45,6 +44,7 @@
           class="mt-4"
           icon="mdi-information-outline"
           variant="tonal"
+          prominent
         >
           <template v-if="isReadonly">
             No content elements added to this side.
@@ -68,7 +68,7 @@
           content-offset="8"
         >
           <VAvatar color="surface" size="32" border>
-            <VIcon class="text-medium-emphasis" icon="mdi-sync" size="18" />
+            <VIcon icon="mdi-sync" size="18" />
           </VAvatar>
         </VDivider>
       </template>
@@ -146,10 +146,6 @@ const deleteCard = () => {
 </script>
 
 <style lang="scss" scoped>
-.v-expansion-panel {
-  border: thin solid rgba(0, 0, 0, 0.12);
-}
-
 .flashcard-drag-handle {
   cursor: pointer;
 }

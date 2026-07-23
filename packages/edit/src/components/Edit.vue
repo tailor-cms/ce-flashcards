@@ -1,56 +1,53 @@
 <template>
-  <VCard class="tce-flashcards" color="grey-lighten-5">
-    <VToolbar class="px-4" color="primary-darken-2" height="36">
-      <VIcon
-        :icon="manifest.ui.icon"
-        color="secondary-lighten-2"
-        size="18"
-        start
-      />
-      <span class="text-title-small">{{ manifest.name }}</span>
-    </VToolbar>
-    <div class="pa-6 text-center">
-      <VExpansionPanels
-        ref="panels"
-        v-model="expanded"
-        rounded="lg"
-        flat
-        multiple
-      >
-        <VExpandTransition v-if="!!cardCount" group>
-          <FlashcardItem
-            v-for="(item, index) in cards"
-            :key="item.id"
-            :allow-deletion="cardCount > 1"
-            :embed-element-config="embedElementConfig"
-            :embeds="embedsByFace[item.id]"
-            :is-expanded="expanded.includes(item.id)"
-            :is-focused="isFocused"
-            :is-readonly="isReadonly"
-            :item="item"
-            :position="index + 1"
-            @delete="deleteItem(item.id)"
-            @save="saveItem($event)"
-          />
-        </VExpandTransition>
-      </VExpansionPanels>
-      <VBtn
-        v-if="!isReadonly"
-        class="mt-6"
-        prepend-icon="mdi-card-plus-outline"
-        text="Add Card"
-        variant="text"
-        @click="addCard"
-      />
-    </div>
-  </VCard>
+  <div class="tce-flashcards text-center">
+    <VExpansionPanels
+      ref="panels"
+      v-model="expanded"
+      class="text-left"
+      rounded="lg"
+      flat
+      multiple
+    >
+      <VExpandTransition v-if="!!cardCount" group>
+        <FlashcardItem
+          v-for="(item, index) in cards"
+          :key="item.id"
+          :allow-deletion="cardCount > 1"
+          :embed-element-config="embedElementConfig"
+          :embeds="embedsByFace[item.id]"
+          :is-expanded="expanded.includes(item.id)"
+          :is-focused="isFocused"
+          :is-readonly="isReadonly"
+          :item="item"
+          :position="index + 1"
+          @delete="deleteItem(item.id)"
+          @save="saveItem($event)"
+        />
+      </VExpandTransition>
+    </VExpansionPanels>
+    <VBtn
+      v-if="!isReadonly"
+      class="mt-4"
+      prepend-icon="mdi-plus"
+      text="Add Card"
+      variant="text"
+      @click="addCard"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { cloneDeep, isNumber, pick, pull, reduce, sortBy } from 'lodash-es';
-import { computed, reactive, ref } from 'vue';
+import {
+  cloneDeep,
+  isEqual,
+  isNumber,
+  pick,
+  pull,
+  reduce,
+  sortBy,
+} from 'lodash-es';
+import { computed, reactive, ref, watch } from 'vue';
 import type { Element, ElementData } from '@tailor-cms/ce-flashcards-manifest';
-import manifest from '@tailor-cms/ce-flashcards-manifest';
 import { useDraggable } from 'vue-draggable-plus';
 import { v4 as uuid } from 'uuid';
 
@@ -137,13 +134,17 @@ useDraggable(panels, {
     emit('save', elementData);
   },
 });
+
+watch(
+  () => props.element.data,
+  (data) => {
+    if (isEqual(data, elementData)) return;
+    Object.assign(elementData, cloneDeep(data));
+  },
+);
 </script>
 
 <style lang="scss" scoped>
-.tce-flashcards {
-  text-align: left;
-}
-
 :deep(.sortable-ghost) > * {
   visibility: hidden;
 }

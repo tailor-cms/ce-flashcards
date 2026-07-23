@@ -34,6 +34,14 @@ const form = ref<HTMLFormElement>();
 const height = ref(props.element.data.height);
 
 watch(
+  () => props.element.data.height,
+  (value) => {
+    if (value === height.value) return;
+    height.value = value;
+  },
+);
+
+watch(
   height,
   debounce(async () => {
     if (!form.value) return;
