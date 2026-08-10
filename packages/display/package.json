@@ -2,6 +2,13 @@
   "name": "@tailor-cms/ce-flashcards-display",
   "description": "Tailor CMS flashcards element end-user component",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailor-cms/ce-flashcards.git",
+    "directory": "packages/display"
+  },
+  "homepage": "https://github.com/tailor-cms/ce-flashcards#readme",
+  "bugs": "https://github.com/tailor-cms/ce-flashcards/issues",
   "type": "module",
   "version": "0.0.5",
   "exports": {
