@@ -5,9 +5,9 @@
       <VExpansionPanelTitle
         v-bind="hoverProps"
         class="pa-2 pr-4"
-        min-height="56"
+        min-height="50"
       >
-        <div class="d-flex align-center w-100">
+        <div class="d-flex align-center w-100 ga-2">
           <span
             v-if="!isReadonly"
             class="flashcard-drag-handle"
@@ -15,7 +15,7 @@
           >
             <VIcon icon="mdi-drag-vertical" />
           </span>
-          <span class="ml-2">Card {{ position }}</span>
+          <span :class="{ 'ml-3': isReadonly }">Card {{ position }}</span>
           <VSpacer />
           <VFadeTransition>
             <VBtn
@@ -26,8 +26,9 @@
               color="error"
               density="comfortable"
               icon="mdi-trash-can-outline"
+              rounded="lg"
               size="small"
-              variant="tonal"
+              variant="text"
               @click.stop="deleteCard"
             />
           </VFadeTransition>
@@ -148,5 +149,9 @@ const deleteCard = () => {
 <style lang="scss" scoped>
 .flashcard-drag-handle {
   cursor: pointer;
+}
+
+:deep(.v-btn) {
+  --v-hover-opacity: 0.12;
 }
 </style>
