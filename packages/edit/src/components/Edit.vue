@@ -37,15 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  cloneDeep,
-  isEqual,
-  isNumber,
-  pick,
-  pull,
-  reduce,
-  sortBy,
-} from 'lodash-es';
+import { cloneDeep, isEqual, pick, pull, reduce, sortBy } from 'lodash-es';
 import { computed, reactive, ref, watch } from 'vue';
 import type { Element, ElementData } from '@tailor-cms/ce-flashcards-manifest';
 import { useDraggable } from 'vue-draggable-plus';
@@ -68,7 +60,13 @@ const expanded = ref<string[]>([]);
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 const panels = ref();
 
-const cards = computed(() => sortBy(elementData.items, 'position'));
+const cards = computed({
+  get: () => sortBy(elementData.items, 'position'),
+  set: (reordered) => {
+    reordered.forEach(({ id }, i) => (elementData.items[id].position = i + 1));
+    emit('save', elementData);
+  },
+});
 const cardCount = computed(() => cards.value.length);
 const embedsByFace = computed(() =>
   reduce(
@@ -112,27 +110,9 @@ const addCard = () => {
   emit('save', elementData);
 };
 
-const calculateNewPosition = (oldIndex: number, newIndex: number) => {
-  if (!newIndex) return cards.value[newIndex].position / 2;
-  if (newIndex + 1 === cardCount.value) {
-    return cards.value[newIndex].position + 1;
-  }
-  const direction = oldIndex > newIndex ? -1 : 1;
-  const prevPos = cards.value[newIndex].position;
-  const nextPos = cards.value[newIndex + direction].position;
-  return (nextPos + prevPos) / 2;
-};
-
-useDraggable(panels, {
+useDraggable(panels, cards, {
   animation: 150,
   handle: '.flashcard-drag-handle',
-  onUpdate: ({ oldIndex, newIndex }) => {
-    if (!isNumber(newIndex) || !isNumber(oldIndex)) return;
-    const position = calculateNewPosition(oldIndex, newIndex);
-    const currentItem = cards.value[oldIndex];
-    Object.assign(elementData.items[currentItem.id], { position });
-    emit('save', elementData);
-  },
 });
 
 watch(
