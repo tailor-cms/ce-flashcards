@@ -1,5 +1,16 @@
 # @tailor-cms/ce-flashcards-server
 
+## 1.0.0
+
+### Major Changes
+
+- Migrate to CEK 2.3.1. Packages are now ESM-only: CommonJS builds and the `main` / `require` entry points are removed, and the manifest and server packages emit `index.js` / `index.d.ts` instead of `index.mjs` / `index.d.mts`. The top toolbar is removed; the card height setting moved to the side toolbar.
+
+### Patch Changes
+
+- Updated dependencies
+  - @tailor-cms/ce-flashcards-manifest@1.0.0
+
 ## 0.1.1
 
 ### Patch Changes
